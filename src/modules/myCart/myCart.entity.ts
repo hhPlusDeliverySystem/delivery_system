@@ -6,6 +6,9 @@ export class MyCart {
   id: number;
 
   @Column()
+  orderId: string;
+
+  @Column()
   storeName: string;
 
   @Column()
