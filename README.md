@@ -1,73 +1,56 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+* TDD로 배달 시스템을 구현하였습니다. 
+* 메인 시나리오 
+  https://stream-talon-ff2.notion.site/1-faf92c276e0b4e8e97c0f14f5ad8f1aa
+* 테스트 시나리오
+ https://docs.google.com/spreadsheets/d/1mQ0bsoQCnQgZGLudDVAhmYH_gl9yv62YTUIFx7jQ4a4/edit#gid=507459023
 
-## Installation
+## Features
+* 유저 : 주문, 장바구니, 리뷰 등록
+* 사장님 : 매장등록, 메뉴등록, 배달 상태관리
+* 공통 : 로그인, 회원가입 
 
+## Getting Started
 ```bash
-$ npm install
+# build
+$ docker build . -t delivery_system
+
+# run
+$ docker container run -d -p 3000:3000 delivery_sytem
+
 ```
+## Swagger
+![화면 캡처 2023-06-30 012752](https://github.com/taekyunJason/delivery_system/assets/44867889/8969e244-f75e-4e92-b32d-b128a92932fb)
 
-## Running the app
+## Branch strategy
+* main
+* develop : 개발용 브랜치
+* feature/xx-{feature-name} : 작업을 위한 브랜치 develop에서 가져옴
+*  hotfix 브랜치 :  main에서 시급한 작업이 있을 경우 main에서 바로 머지 그 후 develop에 머지
 
-```bash
-# development
-$ npm run start
+1. pull request 날려서 feature 브랜치 develop으로 merge
+2. develop 완료되면 main으로 merge
 
-# watch mode
-$ npm run start:dev
+## PR/Issue Template
+### **Pr Template**
+#### 해결하려는 문제가 무엇인가요?    
+* 작성되지 않은 컨트롤러 단을 완성 했습니다.  
+* 스웨거가 일부 컨트롤러에만 적용되는 문제를 해결했습니다.  
+* readme 문서를 업데이트했습니다.  
+#### 어떻게 해결했나요?  
+* app.module.ts 파일에서 필요한 모든 모듈을 불러왔습니다.  
+* 스웨거 설정을 통해 api 설명을 추가했습니다.  
+* 과제 서식에 맞춰 readme 문서를 업데이트 했습니다.  
+#### 어떤 부분에 집중하여 리뷰해야 할까요?  
+* 스웨거 적용에 문제가 없는지 확인 부탁드립니다.  
+* readme에 빠진 부분 혹은 오타가 없는지 확인 부탁드립니다.
 
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+### **Issue Template**
+#### Issue: Feature
+#### Description
+* 설명을 작성하세요
+#### Todo
+* [ ] 할것 목록
+#### ETC
+* 기타
