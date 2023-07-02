@@ -23,9 +23,9 @@ const mockData = {
       storeName: '메가커피',
       menuName: '아이스라떼',
       unitCount: 2,
-      menuPrice: 6000,
+      menuPrice: 7000,
       deliveryPrice: 3000,
-      totalPrice: 9000,
+      totalPrice: 10000,
     },
   ],
   myCart: {
