@@ -13,10 +13,4 @@ describe('DeliveryController', () => {
 
     deliveryController = app.get<DeliveryController>(DeliveryController);
   });
-
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(deliveryController.getHello()).toBe('Hello World!');
-    });
-  });
 });
