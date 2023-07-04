@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { DESTRUCTION } from "dns";
-import { ServerDescription } from "typeorm";
+import { ApiProperty } from '@nestjs/swagger';
+import { DESTRUCTION } from 'dns';
+import { ServerDescription } from 'typeorm';
 
 export class SuccessResponse {
   @ApiProperty({ description: '응답 코드' })
@@ -12,5 +12,4 @@ export class SuccessResponse {
     this.code = code;
     this.message = message;
   }
-
 }

@@ -3,8 +3,6 @@ import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { SuccessResponse } from '../successResponse';
 import { DeliveryService } from './delivery.service';
 
-
-
 @Controller('delivery')
 export class DeliveryController {
   constructor(private deliveryService: DeliveryService) {}
