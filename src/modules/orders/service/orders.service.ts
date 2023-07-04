@@ -14,10 +14,9 @@ export class OrderService {
         private orderRepository: Repository<order>,
       ) {}
     
-
     // todo: user추가하기
     async createOrder(order: CreateOrderDto): Promise<{ status: boolean; msg?: string }>{
-        
+
         try{
            const newOrder = await this.orderRepository.create(order);
             if(newOrder.quantity > 1 && newOrder.quantity <= 10){

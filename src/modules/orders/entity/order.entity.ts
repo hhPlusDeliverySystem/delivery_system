@@ -22,4 +22,5 @@ export class order {
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
     public createdAt: Date;
 
+    
 }

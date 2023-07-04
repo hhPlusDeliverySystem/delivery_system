@@ -10,6 +10,6 @@ export class UpdateOrderDto {
     @IsNumberString()
     totalPrice:number;
 
-
+    
 }
 
