@@ -31,6 +31,12 @@ export class StoreRepository {
     return storeFound;
   }
 
+  async existStoreById(id: number) {
+    return await this.storeModel.exist({
+      where : {id: id}
+    });
+  }
+
   async save(store: Store): Promise<Store> {
     const result = await this.storeModel.save(store);
     return result;
