@@ -12,6 +12,7 @@ import { ReviewModule } from './modules/review/review.module';
 import { DeliveryModule } from './modules/delivery/delivery.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { Menu } from './modules/menu/menu.entity';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -20,9 +21,20 @@ const config: SqliteConnectionOptions = {
   synchronize: true,
 }
 
+const mySqlLocalConfig: MysqlConnectionOptions = {
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '1234',
+    database: 'delivery_system',
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: true
+}
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot(config),
+    TypeOrmModule.forRoot(mySqlLocalConfig),
     ReviewModule,
     DeliveryModule,
     StoreModule,
