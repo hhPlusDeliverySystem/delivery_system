@@ -1,49 +1,66 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateOrderDto } from '../../orders/dto/createOder.dto'
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { order } from '../order.entity'
+import { order } from '../entity/order.entity'
+import { CreateOrderDto } from '../dto/createOder.dto';
+import { UpdateOrderDto } from '../dto/updateOrder.dto';
+
 
 @Injectable()
 export class OrderService {
 
     constructor(
         @InjectRepository(order)
-        private ordersRepository: Repository<order>,
+        private orderRepository: Repository<order>,
       ) {}
     
+    // todo: user추가하기
+    async createOrder(order: CreateOrderDto): Promise<{ status: boolean; msg?: string }>{
 
-    private orders = [{
-        orderId : "orderT01"
-    },
-    {
-        orderId : "orderT02"
+        try{
+           const newOrder = await this.orderRepository.create(order);
+            if(newOrder.quantity > 1 && newOrder.quantity <= 10){
+             await this.orderRepository.save(newOrder);
+             return {
+                status: true,
+                msg:'order was successful'
+             }
+             }else {
+                return {
+                    status: false,
+                    msg:'you should order no more than 10 items'
+                 }
+             }
+        } catch(error:any){
+
+            throw new HttpException('Something went wrong.',HttpStatus.BAD_REQUEST);
+        }
+       
     }
-    ]
-    async createOrder(createOrderDto: CreateOrderDto) {
 
-        const { orderId } = createOrderDto;
-
-        const order = this.orders.find((o) => o.orderId === orderId)
-
-        if(order && this.orders.length <= 10)
+    async findOrderById(userName: string): Promise<{ status: boolean; msg?: string; }>{
+        const order = await this.orderRepository.findOne({ where: {userName : userName} });
+        if(!order){
             return {
-                status : 'success For createOrders',
-            };
-        else {
-            throw new BadRequestException();
+                status: false,
+                msg: 'order not found'
+            }
         }
     }
 
-    async getOrderById(id: number ) {
-        
-        const order = await this.ordersRepository.findOneBy({id: id});
+    async updateOrder(orderId:number, updateOrderDto:UpdateOrderDto){
+        const order = this.orderRepository.findOne({where: {id:orderId}})
 
-        if (order) {
-          return {
-            id: id,
-          }
-        } throw new BadRequestException();
+        const updateOrder = {
+            ...order,
+            ...updateOrderDto
+        }
 
+        return this.orderRepository.save(updateOrder);
     }
+
+    async deleteOrder(orderId:number){
+        return await this.orderRepository.delete(orderId);
+    }
+
 }

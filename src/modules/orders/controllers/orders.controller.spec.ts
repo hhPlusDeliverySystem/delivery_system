@@ -1,66 +1,73 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrderController } from '../controllers/orders.controller';
-import { OrderService } from '../service/orders.service';
+import { OrderService } from '../service/orders.service'
+import { Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { order } from '../entity/order.entity';
 import { CreateOrderDto } from '../dto/createOder.dto';
+import { BadRequestException } from '@nestjs/common';
+
+
+let mockRepository = () =>({
+  findOne: jest.fn(),
+  create: jest.fn(),
+  save: jest.fn(),
+  delete: jest.fn(),
+  count: jest.fn()
+});
+
+type MockRepository<T = any> = Partial<Record<keyof Repository<T>,jest.Mock>>
 
 describe('OrderController', () => {
   let controller: OrderController;
-  let ordersService : OrderService;
+  let orderService: OrderService;
+  let orderReository: MockRepository<order>;
+
+  const createOrderDto = new CreateOrderDto();
+  {createOrderDto.orderId='1',createOrderDto.orderStatus='success',createOrderDto.quentity=5,createOrderDto.totalPrice=10000}
   
-  let createOrderDto = new CreateOrderDto();
-  (createOrderDto.orderId='orderT01')
 
-
-  const orderService = {
-    create: jest.fn((order)=> {
-      return {
-        status: 'success For createOrders'
-      };
-    }),
-
-    findOne: jest.fn((orderId) => {
-      return {id: 'orderT01'}
-    })
-
-  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrderController],
 
       providers :  [OrderService,{
-        provide: 'ORDERS_SERVICE',
-        useValue: ordersService,   
+        provide: getRepositoryToken(order),
+        useValue: mockRepository()
       },
     ],
     }).compile();
 
     controller = module.get<OrderController>(OrderController);
-    ordersService = module.get<OrderService>(OrderService);
-    
-    
+    orderService = module.get<OrderService>(OrderService);
+    orderReository = module.get(getRepositoryToken(order));
   });
+  
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+      expect(controller).toBeDefined();
+    });
 
-  it('should have create function', () =>{
-    expect(ordersService.createOrder).toBeDefined();
-  })
+    it('should create new order', async ()=>{
+      const result = await orderService.createOrder(createOrderDto);
 
-  it('shoud create order and return with successful status',()=>{
-
-     //jest.spyOn(ordersService,'createOrder');
-
-    expect(ordersService.createOrder).toBeCalled();
-
-    expect(ordersService.createOrder(createOrderDto)).toEqual({
-      status : 'success For createOrders'
+      expect(result).toMatchObject({status: true,msg:'order was successful'})
     })
-  })
 
-  it('should find a order for the given id',() =>{
-    
-  })
+    it('should fail if exists', async () =>{
+      const result  = orderReository.findOne.mockResolvedValue(createOrderDto);
+
+      expect(result).toMatchObject(new BadRequestException());
+    })
+
+
+   it('should find a order for the given id',() => {
+    orderReository.findOne.mockResolvedValue(undefined);
+
+   })
+
+
 });
+
+

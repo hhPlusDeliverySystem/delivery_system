@@ -1,12 +1,6 @@
 import { IsNotEmpty,IsNumberString } from 'class-validator'
 
-export class CreateOrderDto {
-
-    @IsNotEmpty()
-    orderId:string;
-
-    @IsNotEmpty()
-    orderStatus:string;
+export class UpdateOrderDto {
 
     @IsNotEmpty()
     @IsNumberString()
@@ -17,6 +11,5 @@ export class CreateOrderDto {
     totalPrice:number;
 
     
-
 }
 

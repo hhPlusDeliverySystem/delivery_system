@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { OrderService } from '../service/orders.service';
 import { CreateOrderDto } from '../dto/createOder.dto';
+import { UpdateOrderDto } from '../dto/updateOrder.dto';
 
 @Controller('order')
 export class OrderController {
@@ -11,20 +12,20 @@ export class OrderController {
     
     @Post('create')
    async createOrder(@Body() createOrderDto: CreateOrderDto ){
-        const response = await this.orderService.createOrder(createOrderDto);
-        
+        const response = await this.orderService.createOrder(createOrderDto);  
         return response;
     }
 
-    @Get(':orderId')
-    getOrderById(@Param('orderId') id: number) {
-    const response = this.orderService.getOrderById(id);
-  return response;
-  } 
+    
+    @Patch()
+    async updateOrder(orderId:number,@Body() UpdateOrderDto: UpdateOrderDto){
+      const response = await this.orderService.updateOrder(orderId,UpdateOrderDto);
+      return response;
+    }
 
 
-
-
-
-
+    @Delete()
+    async deleteOrder(orderId:number){
+      const response = await this.orderService.deleteOrder(orderId);
+    }
 }

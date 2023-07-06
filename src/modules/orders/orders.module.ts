@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { OrderController } from '../orders/controllers/orders.controller';
 import { OrderService } from './service/orders.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { order } from './order.entity';
+import { order } from './entity/order.entity'
 
 @Module({
   imports: [TypeOrmModule.forFeature([order])],
@@ -11,7 +11,8 @@ import { order } from './order.entity';
     {
       provide: "ORDERS_SERVICES",
       useClass: OrderService,
-    }
+    },
+
   ]
 
 })
