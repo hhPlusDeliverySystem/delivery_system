@@ -25,4 +25,7 @@ export class MyCart {
 
   @Column()
   totalPrice: number;
+
+  @Column()
+  userId: number;
 }
