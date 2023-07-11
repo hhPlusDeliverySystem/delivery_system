@@ -1,6 +1,6 @@
 import { Review } from '../review.entity';
 
-export class ReviewDto {
+export class ReviewRequest {
     id: number;
   content: string;
     deliveryId: number;

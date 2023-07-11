@@ -15,6 +15,7 @@ import { Menu } from './modules/menu/menu.entity';
 import { OrdersModule } from './modules/orders/orders.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { order } from './modules/orders/entity/order.entity';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -23,10 +24,21 @@ const config: SqliteConnectionOptions = {
   synchronize: true,
 }
 
+const mySqlLocalConfig: MysqlConnectionOptions = {
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '1234',
+    database: 'delivery_system',
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: true
+}
+
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
-    TypeOrmModule.forRoot(config),
+    TypeOrmModule.forRoot(mySqlLocalConfig),
     ReviewModule,
     DeliveryModule,
     StoreModule,
