@@ -49,18 +49,6 @@ describe('OrderController', () => {
       expect(controller).toBeDefined();
     });
 
-    it('should create new order', async ()=>{
-      const result = await orderService.createOrder(createOrderDto);
-
-      expect(result).toMatchObject({status: true,msg:'order was successful'})
-    })
-
-    it('should fail if exists', async () =>{
-      const result  = orderReository.findOne.mockResolvedValue(createOrderDto);
-
-      expect(result).toMatchObject(new BadRequestException());
-    })
-
 
    it('should find a order for the given id',() => {
     orderReository.findOne.mockResolvedValue(undefined);

@@ -16,7 +16,7 @@ export class CreateOrderDto {
     @IsNumberString()
     totalPrice:number;
 
-    
+
 
 }
 
