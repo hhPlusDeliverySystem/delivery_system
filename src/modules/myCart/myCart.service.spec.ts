@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MyCart } from './myCart.entity';
@@ -40,7 +39,27 @@ const mockData = {
   },
 };
 
-describe('createMyCart', () => {
-  let myCartService: MyCartService;
-  let myCartRepository: MyCartRepository;
+describe('MyCartService', () => {
+  let service: MyCartService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        TypeOrmModule.forFeature([MyCart]),
+        TypeOrmModule.forRoot({
+          type: 'sqlite',
+          database: ':memory:',
+          entities: [MyCart],
+          synchronize: true,
+        }),
+      ],
+      providers: [MyCartService, MyCartRepository],
+    }).compile();
+
+    service = module.get<MyCartService>(MyCartService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
 });
