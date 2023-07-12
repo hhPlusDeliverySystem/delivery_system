@@ -1,0 +1,45 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_URL: 944312626793.dkr.ecr.ap-northeast-2.amazonaws.com/delivery-system
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    name: Deploy Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with: 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Image To AWS ECR
+        id: build-image
+        run: |
+          docker build -f Dockerfile_CD -t $ECR_URL:$IMAGE_TAG .
+          echo "build success"
+
+      - name: Push Image To AWS ECR
+        id: push-image
+        run: |
+          docker push $ECR_URL:$IMAGE_TAG
+          echo "name=image::$ECR_URL:$IMAGE_TAG"
+
+
