@@ -12,12 +12,15 @@ import { ReviewModule } from './modules/review/review.module';
 import { DeliveryModule } from './modules/delivery/delivery.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { Menu } from './modules/menu/menu.entity';
+import { OrdersModule } from './modules/orders/orders.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { order } from './modules/orders/entity/order.entity';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
   database: ':memory:',
-  entities: [Review, Delivery, Store, Menu],
+  entities: [Review, Delivery, Store, Menu,order],
   synchronize: true,
 }
 
@@ -34,11 +37,13 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     TypeOrmModule.forRoot(mySqlLocalConfig),
     ReviewModule,
     DeliveryModule,
     StoreModule,
-    MenuModule
+    MenuModule,
+    OrdersModule
   ],
   controllers: [
     AppController
