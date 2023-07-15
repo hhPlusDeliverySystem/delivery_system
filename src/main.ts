@@ -5,8 +5,9 @@ import { ReviewModule } from './modules/review/review.module';
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn'],
+  });
   const config = new DocumentBuilder()
     .setTitle('Swagger Example')
     .setDescription('Swagger study API description')
