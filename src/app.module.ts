@@ -13,6 +13,12 @@ import { DeliveryModule } from './modules/delivery/delivery.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { Menu } from './modules/menu/menu.entity';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import {
+  WinstonModule,
+  utilities as nestWinstonModuleUtilities,
+} from 'nest-winston';
+
+import * as winston from 'winston';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -22,14 +28,14 @@ const config: SqliteConnectionOptions = {
 }
 
 const mySqlLocalConfig: MysqlConnectionOptions = {
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: '1234',
-    database: 'delivery_system',
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: true
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: '1234',
+  database: 'delivery_system',
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  synchronize: true
 }
 
 @Module({
@@ -38,7 +44,18 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
     ReviewModule,
     DeliveryModule,
     StoreModule,
-    MenuModule
+    MenuModule,
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            nestWinstonModuleUtilities.format.nestLike('MyApp', { prettyPrint: true }),
+          ),
+        }),
+      ],
+    }),
   ],
   controllers: [
     AppController
