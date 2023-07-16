@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,6 +19,7 @@ import {
 } from 'nest-winston';
 
 import * as winston from 'winston';
+import { MyCartModule } from './modules/myCart/myCart.module';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -45,15 +46,20 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
     DeliveryModule,
     StoreModule,
     MenuModule,
+    MyCartModule,
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
-          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
           format: winston.format.combine(
             winston.format.timestamp(),
-            nestWinstonModuleUtilities.format.nestLike('MyApp', { prettyPrint: true }),
+            winston.format.ms(),
+            nestWinstonModuleUtilities.format.nestLike('MyApp', {
+              colors: true,
+              prettyPrint: true,
+            }),
           ),
         }),
+        // other transports...
       ],
     }),
   ],
@@ -61,7 +67,7 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
     AppController
   ],
   providers: [
-    AppService
+    AppService, Logger
   ],
 })
 export class AppModule { }

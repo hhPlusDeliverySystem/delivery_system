@@ -34,7 +34,8 @@
     "sqlite3": "^5.1.6",
     "swagger-ui-express": "^4.6.3",
     "typeorm": "^0.3.17",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.0.0",
