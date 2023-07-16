@@ -1,6 +1,6 @@
 # Install Dependencies
 
-FROM --platform=linux/amd64 node:18 AS install-dependencies
+FROM node:18 AS install-dependencies
 RUN mkdir -p /var/app
 WORKDIR /var/app
 COPY package.json package-lock.json ./
@@ -8,7 +8,7 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Creating Build
-FROM --platform=linux/amd64 node:18 AS create-build
+FROM node:18 AS create-build
 WORKDIR /var/app
 COPY --from=install-dependencies /var/app ./
 RUN npm run build
