@@ -1,11 +1,21 @@
-import { Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Logger,
+} from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { SuccessResponse } from '../successResponse';
 import { MyCartService } from './myCart.service';
 
 @Controller('myCart')
 export class MyCartController {
-  constructor(private readonly myCartController: MyCartService) {}
+  constructor(
+    private readonly myCartController: MyCartService,
+    private readonly logger: Logger,) { }
 
   @Post('/mycart')
   @ApiOperation({
@@ -19,13 +29,14 @@ export class MyCartController {
     return new SuccessResponse(100, '장바구니가 생성되었습니다.');
   }
 
-  @Get('/mycart')
+  @Get('')
   @ApiOperation({
     summary: '장바구니 조회 api',
     description: '장바구니가 있는 회원의 경우 장바구니 조회',
   })
   @ApiCreatedResponse({ description: '장바구니 조회', type: SuccessResponse })
   async getMyCart(@Param('cartId') cartId: string): Promise<SuccessResponse> {
+    this.logger.log('getMyCart', MyCartController.name);
     return new SuccessResponse(100, '장바구니가 조회되었습니다.');
   }
 

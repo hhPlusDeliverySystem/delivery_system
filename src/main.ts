@@ -1,13 +1,57 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ReviewModule } from './modules/review/review.module';
+import {
+  WinstonModule,
+  utilities as nestWinstonModuleUtilities,
+} from 'nest-winston';
 
+import * as winston from 'winston'
+import { createLogger } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn'],
+  const instance = createLogger({
+    // options of Winston
+    transports: [
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.timestamp(),
+          winston.format.ms(),
+          nestWinstonModuleUtilities.format.nestLike('MyApp', {
+            colors: true,
+            prettyPrint: true,
+          }),
+        ),
+      }),
+      // new winston.transports.File({ filename: 'combined.log' }),
+      // other transports...
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      new (require('winston-daily-rotate-file'))({
+        format: winston.format.combine(
+          winston.format.timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss',
+          }),
+          winston.format.printf(
+            (info) =>
+              `[${info.timestamp}] ${process.env.APP_ENV}.${info.level}: ${info.message}`,
+          ),
+        ),
+        filename: 'responder-logs/%DATE%.log',
+        datePattern: 'YYYY-MM-DD',
+        zippedArchive: true,
+        maxSize: '20m',
+        maxFiles: '14d',
+      }),
+    ],
   });
+
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      instance,
+    }),
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Swagger Example')
     .setDescription('Swagger study API description')
