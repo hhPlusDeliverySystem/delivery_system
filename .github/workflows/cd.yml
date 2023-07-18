@@ -47,7 +47,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: yunju2
+          container-name: delivery-system
           image: ${{ steps.push-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
