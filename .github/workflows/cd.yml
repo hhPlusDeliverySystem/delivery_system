@@ -32,28 +32,39 @@ jobs:
 
       - name: Build Image To AWS ECR
         id: build-image
+        env:
+          RDS_HOST: ${{ secrets.RDS_HOST }}
+          RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
+          RDS_PW: ${{ secrets.RDS_PW }}
         run: |
           docker build -f Dockerfile_CD -t $ECR_URL:$IMAGE_TAG .
+          echo "RDS HOST = $RDS_HOST"
+          echo "RDS USERNAME = $RDS_USERNAME"
+          echo "RDS PW = $RDS_PW"
           echo "build success"
 
       - name: Push Image To AWS ECR
         id: push-image
         run: |
           docker push $ECR_URL:$IMAGE_TAG
-          echo "name=image::$ECR_URL:$IMAGE_TAG"
+          echo "::set-output name=image::$ECR_URL:$IMAGE_TAG"
+      
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition yunju2 --query taskDefinition > task-definition.json
 
-      - name: Render Amazon ECS task definition
-        id: render-task-definition
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: yunju2
-          image: ${{ steps.build-image.outputs.image }}
+          container-name: delivery-system
+          image: ${{ steps.push-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with: 
-          task-definition: ${{ steps.setting-task-definition.outputs.task-definition }}
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: delivery-server17
           cluster: delivery-system
           wait-for-service-stability: false

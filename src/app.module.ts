@@ -21,6 +21,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 
 import * as winston from 'winston';
 import { MyCartModule } from './modules/myCart/myCart.module';
+import { ConfigModule } from '@nestjs/config';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -30,19 +31,22 @@ const config: SqliteConnectionOptions = {
 }
 
 const mySqlLocalConfig: MysqlConnectionOptions = {
-  type: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  username: 'root',
-  password: '1234',
-  database: 'delivery_system',
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true
+    type: 'mysql',
+    host: process.env.RDS_HOST,
+    port: 3306,
+    username: process.env.RDS_USERNAME,
+    password: process.env.RDS_PW,
+    database: 'delivery_system',
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: true
 }
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(mySqlLocalConfig),
+    ConfigModule.forRoot({
+      
+    }),
     ReviewModule,
     DeliveryModule,
     StoreModule,
@@ -71,6 +75,7 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
     AppService, Logger
   ],
 })
+
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
