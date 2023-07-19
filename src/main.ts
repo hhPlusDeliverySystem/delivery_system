@@ -9,6 +9,7 @@ import {
 import * as winston from 'winston'
 import { createLogger } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
+import { winstonLogger } from './utils/winston.util';
 
 async function bootstrap() {
   const instance = createLogger({
@@ -47,9 +48,7 @@ async function bootstrap() {
   });
 
   const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      instance,
-    }),
+    logger: winstonLogger,
   });
 
   const config = new DocumentBuilder()
