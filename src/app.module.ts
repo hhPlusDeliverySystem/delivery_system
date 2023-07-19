@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Module, Logger } from '@nestjs/common';
+import { Module, Logger, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,6 +17,7 @@ import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 import * as winston from 'winston';
 import { MyCartModule } from './modules/myCart/myCart.module';
@@ -70,4 +71,8 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
     AppService, Logger
   ],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
