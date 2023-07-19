@@ -13,6 +13,7 @@ import { DeliveryModule } from './modules/delivery/delivery.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { Menu } from './modules/menu/menu.entity';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import { ConfigModule } from '@nestjs/config';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -23,10 +24,10 @@ const config: SqliteConnectionOptions = {
 
 const mySqlLocalConfig: MysqlConnectionOptions = {
     type: 'mysql',
-    host: 'delivery-db.cnccymes2te0.ap-northeast-2.rds.amazonaws.com',
+    host: process.env.RDS_HOST,
     port: 3306,
-    username: 'admin',
-    password: 'delivery1234',
+    username: process.env.RDS_USERNAME,
+    password: process.env.RDS_PW,
     database: 'delivery_system',
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true
@@ -35,6 +36,9 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
 @Module({
   imports: [
     TypeOrmModule.forRoot(mySqlLocalConfig),
+    ConfigModule.forRoot({
+      
+    }),
     ReviewModule,
     DeliveryModule,
     StoreModule,
