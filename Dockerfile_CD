@@ -20,5 +20,12 @@ COPY --from=install-dependencies /var/app/node_modules ./node_modules
 COPY --from=create-build /var/app/dist ./dist
 COPY package.json ./
 RUN npm prune --production
+env:
+  RDS_HOST: ${{ secrets.RDS_HOST }}
+  RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
+  RDS_PW: ${{ secrets.RDS_PW }}
 EXPOSE 3000
 CMD [ "node", "dist/main.js" ]
+CMD [ "echo", "$RDS_HOST" ]
+CMD [ "echo", "$RDS_USERNAME" ]
+CMD [ "echo", "$RDS_PW" ]
