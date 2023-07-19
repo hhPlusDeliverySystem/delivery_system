@@ -8,6 +8,7 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_URL: 944312626793.dkr.ecr.ap-northeast-2.amazonaws.com/delivery-server
+  ECR_REPOSITORY: delivery-server
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
@@ -40,7 +41,7 @@ jobs:
         id: push-image
         run: |
           docker push $ECR_URL:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "::set-output name=image::$ECR_URL/$ECR_REPOSITORY:$IMAGE_TAG"
       
       - name: Download task definition
         run: |
