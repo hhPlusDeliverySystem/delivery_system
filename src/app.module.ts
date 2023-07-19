@@ -23,10 +23,10 @@ const config: SqliteConnectionOptions = {
 
 const mySqlLocalConfig: MysqlConnectionOptions = {
     type: 'mysql',
-    host: 'localhost',
+    host: 'delivery-db.cnccymes2te0.ap-northeast-2.rds.amazonaws.com',
     port: 3306,
-    username: 'root',
-    password: '1234',
+    username: 'admin',
+    password: 'delivery1234',
     database: 'delivery_system',
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true

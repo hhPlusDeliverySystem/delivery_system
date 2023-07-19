@@ -8,7 +8,6 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_URL: 944312626793.dkr.ecr.ap-northeast-2.amazonaws.com/delivery-server
-  ECR_REPOSITORY: delivery-server
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
