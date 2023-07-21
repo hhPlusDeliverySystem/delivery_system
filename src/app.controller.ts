@@ -11,7 +11,8 @@ export class AppController {
   getHello(): string {
     this.logger.log({
       level: 'info',
-      message: 'Hello distributed log files!'
+      message: 'Hello distributed log files!',
+      context: AppController.name,
     });
     this.logger.warn('Hello again warn logs');
     return this.appService.getHello();
