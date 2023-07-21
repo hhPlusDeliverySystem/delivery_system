@@ -1,11 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ReviewModule } from './modules/review/review.module';
+import {
+  WinstonModule,
+  utilities as nestWinstonModuleUtilities,
+} from 'nest-winston';
 
+import * as winston from 'winston'
+import { createLogger } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
+import { winstonLogger } from './utils/winston.util';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  const app = await NestFactory.create(AppModule, {
+    logger: winstonLogger,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Swagger Example')
