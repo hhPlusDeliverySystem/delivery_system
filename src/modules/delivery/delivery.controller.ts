@@ -4,7 +4,7 @@ import { SuccessResponse } from '../successResponse';
 import { DeliveryService } from './delivery.service';
 
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
+import { level, Logger } from 'winston';
 import { AppController } from 'src/app.controller';
 
 @Controller('delivery')
@@ -25,7 +25,11 @@ export class DeliveryController {
   async createDelivery(
     @Param('deliveryId') deliveryId: number,
   ): Promise<SuccessResponse> {
-    this.logger.log('배달 시작', DeliveryController.name);
+    this.logger.log({
+      level: 'info',
+      message: '배달 시작',
+      context: DeliveryController.name,
+    });
     // await this.deliveryService.updateDeliveryStart(deliveryId, new Date());
     return new SuccessResponse(1000, '배달이 시작되었습니다.');
   }
