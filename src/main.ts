@@ -10,6 +10,7 @@ import * as winston from 'winston'
 import { createLogger } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { winstonLogger } from './utils/winston.util';
+import { HttpExceptionFilter } from './middleware/exception.filter';
 
 async function bootstrap() {
 
@@ -26,7 +27,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
+  app.useGlobalFilters(new HttpExceptionFilter);
   await app.listen(3000);
 }
 bootstrap();
