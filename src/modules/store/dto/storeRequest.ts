@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class StoreRequest {
   @ApiProperty({ description: '유저 아이디' })

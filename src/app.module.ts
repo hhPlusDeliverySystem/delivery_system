@@ -21,7 +21,13 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 
 import * as winston from 'winston';
 import { MyCartModule } from './modules/myCart/myCart.module';
+import { EntitySchemaEmbeddedColumnOptions } from 'typeorm';
 // import { ConfigModule } from '@nestjs/config';
+import { env } from 'process';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './middleware/exception.filter';
+import { Bookmark } from './modules/bookmark/bookmark.entity';
+import { BookmarkModule } from './modules/bookmark/bookmark.module';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -32,10 +38,10 @@ const config: SqliteConnectionOptions = {
 
 const mySqlLocalConfig: MysqlConnectionOptions = {
   type: 'mysql',
-  host: 'localhost',
+  host: "localhost",
   port: 3306,
-  username: 'root',
-  password: '1234',
+  username: "root",
+  password: "1234",
   database: 'delivery_system',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   synchronize: true
@@ -51,27 +57,16 @@ const mySqlLocalConfig: MysqlConnectionOptions = {
     StoreModule,
     MenuModule,
     MyCartModule,
-    // WinstonModule.forRoot({
-    //   transports: [
-    //     new winston.transports.Console({
-    //       format: winston.format.combine(
-    //         winston.format.timestamp(),
-    //         winston.format.ms(),
-    //         nestWinstonModuleUtilities.format.nestLike('MyApp', {
-    //           colors: true,
-    //           prettyPrint: true,
-    //         }),
-    //       ),
-    //     }),
-    //     // other transports...
-    //   ],
-    // }),
   ],
   controllers: [
     AppController
   ],
   providers: [
-    AppService, Logger
+    AppService, Logger,
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter
+    // }
   ],
 })
 

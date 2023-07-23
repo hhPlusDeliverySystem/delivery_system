@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable } from '@nestjs/common';
 import { MyCartRepository } from './myCart.repository';
 
 @Injectable()
 export class MyCartService {
-  constructor(private MyCartRepository: MyCartRepository) {}
+  constructor(private MyCartRepository: MyCartRepository) { }
 
   async getMyCart(id: number, cartId: string) {
+    return cartId;
+  }
+
+  async createMyCartWithException(cartId: string) {
+    throw new BadRequestException('Not implemented');
     return cartId;
   }
 
