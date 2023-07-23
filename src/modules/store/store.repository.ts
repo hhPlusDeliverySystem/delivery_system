@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, Transaction } from "typeorm";
 import { Store } from "./store.entity";
 
 
@@ -33,7 +33,7 @@ export class StoreRepository {
 
   async existStoreById(id: number) {
     return await this.storeModel.exist({
-      where : {id: id}
+      where: { id: id },
     });
   }
 

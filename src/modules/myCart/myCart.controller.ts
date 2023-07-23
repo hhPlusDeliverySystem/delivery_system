@@ -6,18 +6,22 @@ import {
   Delete,
   Param,
   Logger,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { LoggerService } from 'src/utils/logger.service';
 import { SuccessResponse } from '../successResponse';
 import { MyCartService } from './myCart.service';
 
 @Controller('myCart')
 export class MyCartController {
   constructor(
-    private readonly myCartController: MyCartService,
-    private readonly logger: Logger,) { }
+    private myCartService: MyCartService,
+    private readonly logger: Logger,
+    private readonly loggerService: LoggerService,
+  ) { }
 
-  @Post('/mycart')
+  @Post('')
   @ApiOperation({
     summary: '장바구니 생성 api',
     description: '장바구니가 없는 회원의 경우 장바구니 생성',
@@ -26,6 +30,8 @@ export class MyCartController {
   async createMyCart(
     @Param('cartId') cartId: string,
   ): Promise<SuccessResponse> {
+    this.loggerService.log('createMyCart');
+    await this.myCartService.createMyCartWithException(cartId);
     return new SuccessResponse(100, '장바구니가 생성되었습니다.');
   }
 
@@ -36,7 +42,7 @@ export class MyCartController {
   })
   @ApiCreatedResponse({ description: '장바구니 조회', type: SuccessResponse })
   async getMyCart(@Param('cartId') cartId: string): Promise<SuccessResponse> {
-    this.logger.log('getMyCart', MyCartController.name);
+    this.loggerService.log('getMyCart');
     return new SuccessResponse(100, '장바구니가 조회되었습니다.');
   }
 
@@ -47,6 +53,7 @@ export class MyCartController {
   })
   @ApiCreatedResponse({ description: '장바구니 수정', type: SuccessResponse })
   async putMyCart(@Param('cartId') cartId: string): Promise<SuccessResponse> {
+    this.loggerService.log('putMyCart');
     return new SuccessResponse(100, '장바구니가 수정되었습니다.');
   }
 
@@ -59,6 +66,7 @@ export class MyCartController {
   async deleteMyCart(
     @Param('cartId') cartId: string,
   ): Promise<SuccessResponse> {
+    this.loggerService.log('deleteMyCart');
     return new SuccessResponse(100, '장바구니가 삭제되었습니다.');
   }
 }

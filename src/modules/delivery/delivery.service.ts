@@ -3,10 +3,13 @@ import { Delivery } from './delivery.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeliveryRepository } from './delivery.repository';
+import { LoggerService } from 'src/utils/logger.service';
 
 @Injectable()
 export class DeliveryService {
-  constructor(private deliveryRepository: DeliveryRepository) {}
+  constructor(
+    private deliveryRepository: DeliveryRepository,
+    private loggerService: LoggerService) { }
 
   async sendDeliveryAlim(id: number, message: string) {
     return message;
