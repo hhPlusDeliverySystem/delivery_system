@@ -50,14 +50,20 @@ export class MenuService {
   }
 
   async saveMenu(menuRequest: MenuRequest): Promise<Menu> {
-    if (this.validateMenuRequest(menuRequest)) {
-      const newMenu = new Menu();
-      newMenu.storeId = menuRequest.storeId;
-      newMenu.name = menuRequest.name;
-      newMenu.price = menuRequest.price;
-      const result = await this.menuRepository.save(newMenu);
-      return result;
+    try {
+      await this.validateMenuRequest(menuRequest)
     }
+    catch (error) {
+      throw new BadRequestException(error.message)
+    }
+
+    const newMenu = new Menu();
+    newMenu.storeId = menuRequest.storeId;
+    newMenu.name = menuRequest.name;
+    newMenu.price = menuRequest.price;
+    const result = await this.menuRepository.save(newMenu);
+    return result;
+
   }
 
 }

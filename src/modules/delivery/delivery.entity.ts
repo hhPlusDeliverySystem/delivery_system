@@ -12,32 +12,34 @@ export class Delivery {
   @Column()
   departureTime: Date;
 
-  @Column()
+  @Column({ nullable: true })
   arrivalTime: Date;
 
   @Column({
     type: 'varchar',
-    length: 20,
+    length: 20
   })
   deliveryStatus: string;
 
   @Column({
     type: 'varchar',
+    nullable: true
   })
   departureMessage: string;
 
   @Column({
     type: 'varchar',
+    nullable: true
   })
   arrivalMessage: string;
 
-  @Column()
+  @Column({ nullable: true })
   departureAlimToUser: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   arrivalAlimToUser: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   arrivalAlimToOwner: boolean;
 
 

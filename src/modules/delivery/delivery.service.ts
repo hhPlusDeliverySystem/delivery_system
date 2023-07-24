@@ -20,6 +20,7 @@ export class DeliveryService {
       id,
       time,
     );
+
     if (updated.departureTime == null) {
       throw new BadRequestException('배달 시작 시간 업데이트에 실패했습니다.');
     }

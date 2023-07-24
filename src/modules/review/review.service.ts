@@ -3,6 +3,9 @@ import { Review } from "./review.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ReviewRepository } from "./review.repository";
 import { DeliveryRepository } from "../delivery/delivery.repository";
+import { ReviewDto } from "./dto/reviewDto";
+import { timingSafeEqual } from "crypto";
+import { ReviewRequest } from "./dto/reviewRequest";
 
 @Injectable()
 export class ReviewService {
@@ -17,13 +20,31 @@ export class ReviewService {
     return review;
   }
 
-  async createReview(deliveryId: number, userId: number, content: string) {
-    const resultCode = 1000;
-    const now = new Date();
-    const delivery = await this.deliveryRepository.findDeliveryById(deliveryId);
+  async findReviewById(id: number): Promise<ReviewDto> {
+    const review = await this.findOneById(id);
+    return new ReviewDto(review);
+  }
 
+  async createReview(review: ReviewRequest): Promise<Review> {
+    const now = new Date();
+    const deliveryId = review.deliveryId;
+    const userId = review.userId;
+    const content = review.content;
+    try {
+      await this.validateReview(deliveryId, now);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+    const result = await this.reviewRepository.save(
+      new Review(content, deliveryId, userId),
+    );
+    return result;
+  }
+
+  async validateReview(deliveryId: number, now: Date) {
+    const delivery = await this.deliveryRepository.findDeliveryById(deliveryId);
     const reviews = await this.reviewRepository.findReviewByDeliveryId(
-      deliveryId)
+      deliveryId);
 
     if (reviews.length > 0) {
       throw new BadRequestException('이미 리뷰가 작성되었습니다.');
@@ -46,7 +67,5 @@ export class ReviewService {
     if (timeGapInMinutes < 60 * 1) {
       throw new BadRequestException('배달 도착 후 1시간이 지나지 않았습니다.');
     }
-
   }
-
 }
