@@ -41,7 +41,6 @@ export class StoreService {
   }
 
   async saveStore(store: StoreRequest): Promise<Store> {
-    // this.validateStoreRequest(store);
     try {
       await this.validateStoreRequest(store);
     } catch (error) {

@@ -18,7 +18,7 @@ export class DeliveryRepository {
 
   async save(delivery: Delivery): Promise<Delivery> {
     const result = await this.deliveryModel.save(delivery);
-    return delivery;
+    return result;
   }
 
 

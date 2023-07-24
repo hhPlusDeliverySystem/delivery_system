@@ -15,9 +15,12 @@ export class BookmarkRepository {
     return this.bookmarkModel.save(bookmark);
   }
 
-  async findByUserIdAndRestaurantId(userId: number, restaurantId: number) : Promise<Bookmark> {
+  async findByUserIdAndRestaurantId(
+    userId: number,
+    restaurantId: number,
+  ): Promise<Bookmark> {
     return await this.bookmarkModel.findOne({
-        where: { userId : userId, restaurantId: restaurantId }
+      where: { userId: userId, restaurantId: restaurantId },
     });
   }
 } 
