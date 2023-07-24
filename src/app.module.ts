@@ -43,13 +43,7 @@ const config: SqliteConnectionOptions = {
       password: process.env.RDS_PW,
       database: 'delivery_system',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false,
-      ssl: true,
-      extra: {
-          trustServerCertificate: true,
-          Encrypt: true,
-          IntegratedSecurity: false,
-      }
+      synchronize: true
   }),
     ReviewModule,
     DeliveryModule,
