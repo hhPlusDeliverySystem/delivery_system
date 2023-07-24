@@ -22,12 +22,14 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import * as winston from 'winston';
 import { MyCartModule } from './modules/myCart/myCart.module';
 import { EntitySchemaEmbeddedColumnOptions } from 'typeorm';
-// import { ConfigModule } from '@nestjs/config';
+
 import { env } from 'process';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './middleware/exception.filter';
 import { Bookmark } from './modules/bookmark/bookmark.entity';
 import { BookmarkModule } from './modules/bookmark/bookmark.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -36,22 +38,27 @@ const config: SqliteConnectionOptions = {
   synchronize: true,
 }
 
-const mySqlLocalConfig: MysqlConnectionOptions = {
-  type: 'mysql',
-  host: "localhost",
-  port: 3306,
-  username: "root",
-  password: "1234",
-  database: 'delivery_system',
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true
-}
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(mySqlLocalConfig),
     // ConfigModule.forRoot({
-    // }),
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath : '.env.dev'
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.RDS_HOST,
+      port: 3306,
+      username: process.env.RDS_USERNAME,
+      password: process.env.RDS_PW,
+      database: 'delivery_system',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true
+  }),
     ReviewModule,
     DeliveryModule,
     StoreModule,
@@ -76,3 +83,8 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
+
+console.log(process.env.RDS_HOST)
+console.log(process.env.RDS_USERNAME)
+console.log(process.env.RDS_PW)
+

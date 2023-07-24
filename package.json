@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "cross-env NODE_ENV=dev nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -28,6 +28,7 @@
     "@nestjs/swagger": "^7.0.4",
     "@nestjs/typeorm": "^10.0.0",
     "class-validator": "^0.14.0",
+    "cross-env": "^7.0.3",
     "mysql2": "^3.5.0",
     "nest-winston": "^1.9.3",
     "reflect-metadata": "^0.1.13",
