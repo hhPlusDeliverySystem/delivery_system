@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { SignUpRequest } from './dto/signupRequest';
 import { User } from './user.entity';
+import { UserRepository } from './user.repository';
 
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: NewType) { };
-  async createUser(signup: SignUpRequest): NewType_1 {
+  constructor(private userRepository: UserRepository) { };
+  async createUser(signup: SignUpRequest): Promise<User> {
     const user = new User();
     user.email = signup.email;
     user.password = signup.password;
