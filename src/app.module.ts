@@ -22,7 +22,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import * as winston from 'winston';
 import { MyCartModule } from './modules/myCart/myCart.module';
 import { ConfigModule } from '@nestjs/config';
-import mysqlConfig from 'src/config/mysql.config'
+import configuration from './config';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -34,6 +34,7 @@ const config: SqliteConnectionOptions = {
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath : '.env.dev'
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
