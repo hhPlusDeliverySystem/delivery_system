@@ -4,7 +4,7 @@ FROM node:18 AS install-dependencies
 RUN mkdir -p /var/app
 WORKDIR /var/app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --omit=dev
 COPY . .
 
 # Creating Build
@@ -19,6 +19,7 @@ WORKDIR /var/app
 COPY --from=install-dependencies /var/app/node_modules ./node_modules
 COPY --from=create-build /var/app/dist ./dist
 COPY package.json ./
+COPY .env ./
 RUN npm prune --production
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "node", "dist/main.js" ]
