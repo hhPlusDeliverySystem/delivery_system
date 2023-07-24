@@ -18,7 +18,7 @@ FROM node:18 AS run
 WORKDIR /var/app
 COPY --from=install-dependencies /var/app/node_modules ./node_modules
 COPY --from=create-build /var/app/dist ./dist
-COPY package.json ./
+COPY . .
 RUN npm prune --production
 EXPOSE 3000
 CMD [ "node", "dist/main.js" ]

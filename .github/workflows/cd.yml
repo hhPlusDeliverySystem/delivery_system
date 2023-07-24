@@ -38,9 +38,6 @@ jobs:
           RDS_PW: ${{ secrets.RDS_PW }}
         run: |
           docker build -f Dockerfile_CD -t $ECR_URL:$IMAGE_TAG .
-          echo "RDS HOST = $RDS_HOST"
-          echo "RDS USERNAME = $RDS_USERNAME"
-          echo "RDS PW = $RDS_PW"
           echo "build success"
 
       - name: Push Image To AWS ECR
