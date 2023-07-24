@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
+import { LoggerService } from 'src/utils/logger.service';
 import { UserService } from './user.service';
 
 interface User {
@@ -8,20 +9,12 @@ interface User {
 
 @Controller()
 export class UserController {
-  constructor(private readonly userController: UserService) {}
+  constructor(
+    private readonly userController: UserService,
+    private readonly loggerService: LoggerService) { }
 
-  @Get()
+  @Post()
   getHello(): string {
     return this.userController.getHello();
   }
 }
-
-function getOwnerSignin(): User {
-  const newUser: User = {
-    id: 'jason11',
-    email: 'jason@gmail.com',
-  };
-
-  return newUser;
-}
-export { getOwnerSignin };
