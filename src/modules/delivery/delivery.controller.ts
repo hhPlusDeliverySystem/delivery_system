@@ -1,4 +1,4 @@
-import { Controller, Inject, Param, Post, Put } from '@nestjs/common';
+import { Controller, Inject, Param, Post, Put, UseFilters } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { SuccessResponse } from '../successResponse';
 import { DeliveryService } from './delivery.service';
@@ -6,7 +6,9 @@ import { DeliveryService } from './delivery.service';
 import { level, Logger } from 'winston';
 import { AppController } from 'src/app.controller';
 import { LoggerService } from 'src/utils/logger.service';
+import { HttpExceptionFilter } from 'src/middleware/exception.filter';
 
+@UseFilters(HttpExceptionFilter)
 @Controller('delivery')
 export class DeliveryController {
 

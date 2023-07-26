@@ -15,5 +15,6 @@ export class UserService {
     user.userId = signup.userId;
     user.address = signup.address;
     const result = await this.userRepository.save(user);
+    return result;
   }
 }

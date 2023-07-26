@@ -25,11 +25,13 @@ import { EntitySchemaEmbeddedColumnOptions } from 'typeorm';
 
 import { env } from 'process';
 import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from './middleware/exception.filter';
 import { Bookmark } from './modules/bookmark/bookmark.entity';
 import { BookmarkModule } from './modules/bookmark/bookmark.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config';
+import { SlackService } from './utils/slack.service';
+import { HttpModule } from '@nestjs/axios';
+import { HttpExceptionFilter } from './middleware/exception.filter';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -41,13 +43,8 @@ const config: SqliteConnectionOptions = {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(mySqlLocalConfig),
-    // ConfigModule.forRoot({
-
-@Module({
-  imports: [
     ConfigModule.forRoot({
-      envFilePath : '.env.dev'
+      envFilePath: '.env.dev'
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -58,22 +55,24 @@ const config: SqliteConnectionOptions = {
       database: 'delivery_system',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true
-  }),
+    }),
     ReviewModule,
     DeliveryModule,
     StoreModule,
     MenuModule,
     MyCartModule,
+    HttpModule
   ],
   controllers: [
     AppController
   ],
   providers: [
     AppService, Logger,
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: HttpExceptionFilter
-    // }
+    SlackService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter
+    }
   ],
 })
 

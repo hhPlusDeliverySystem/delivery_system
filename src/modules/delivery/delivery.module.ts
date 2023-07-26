@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerService } from 'src/utils/logger.service';
+import { SlackService } from 'src/utils/slack.service';
 import { Logger } from 'winston';
 import { Review } from '../review/review.entity';
 import { ReviewRepository } from '../review/review.repository';
@@ -17,7 +18,7 @@ import { DeliveryService } from './delivery.service';
     DeliveryRepository,
     ReviewRepository,
     Logger,
-    LoggerService,
+    LoggerService
   ],
   exports: [DeliveryRepository],
 })
