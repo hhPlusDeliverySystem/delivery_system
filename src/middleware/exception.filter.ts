@@ -29,11 +29,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       | string
       | { error: string; statusCode: number; message: string | string[] };
 
-
     this.logger.error(
       `${req.ip} ${req.originalUrl} ${req.method} ${exception}`,
     );
-
 
     res.status(status).json({
       timestamp: new Date().toISOString(),
@@ -41,26 +39,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error,
     });
 
-
     const slackResponse = {
-      statusCode: status,
+      statusCode: 500,
       timestamp: new Date().toISOString(),
       path: req.url,
       error: {
         message: exception.message,
-        error: exception.name
+        error: exception.name,
       },
     };
 
-    const responseJson = JSON.stringify(slackResponse);
-    if (status >= 400 && status < 500) {
-      // Handle BadRequest
-      await this.slackService.postMessageToSlack(responseJson);
-      // console.log("this.slackService.postMessageToSlack('BadRequest');")
-    } else {
-      // Handle Internal Server Error
-      await this.slackService.postMessageToSlack('InternalServerError');
-    }
+    const responseJson = JSON.stringify(slackResponse, null, 2);
+    // if (!(status >= 400 && status < 500)) {
+    await this.slackService.postMessageToSlack(responseJson);
+    // }
   }
 
   catchUnknow(exception: unknown, host: ArgumentsHost) {
@@ -79,8 +71,29 @@ export class HttpExceptionFilter implements ExceptionFilter {
     res.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
-      path: req.url
+      path: req.url,
     });
-
   }
+}
+
+function exception(
+  exception: any,
+  unknown: any,
+  host: any,
+  ArgumentsHost: any,
+) {
+  throw new Error('Function not implemented.');
+}
+function catchUnknow(
+  exception: (
+    exception: any,
+    unknown: any,
+    host: any,
+    ArgumentsHost: any,
+  ) => void,
+  unknown: any,
+  host: any,
+  ArgumentsHost: any,
+) {
+  throw new Error('Function not implemented.');
 }
