@@ -76,7 +76,3 @@ export class AppModule implements NestModule {
   }
 }
 
-console.log(process.env.RDS_HOST)
-console.log(process.env.RDS_USERNAME)
-console.log(process.env.RDS_PW)
-
