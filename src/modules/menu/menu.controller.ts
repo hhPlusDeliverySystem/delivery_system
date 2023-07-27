@@ -17,6 +17,7 @@ export class MenuController {
   ) { }
 
   @Post('')
+  @UseFilters(HttpExceptionFilter)
   @ApiOperation({ summary: '메뉴 등록 api', description: '메뉴 등록' })
   async createMenu(@Body() request: MenuRequest): Promise<SuccessResponse> {
     this.loggerService.infoWithContext('메뉴 등록 요청', request);

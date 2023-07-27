@@ -8,13 +8,19 @@ import {
 } from '@nestjs/common';
 import { LoggerService } from 'src/utils/logger.service';
 import { Request, Response } from 'express';
+import { SlackService } from 'src/utils/slack.service';
+import { HttpService } from '@nestjs/axios';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  // constructor(private readonly logger: LoggerService) { }
+  private slackService: SlackService;
+  constructor() {
+    this.slackService = new SlackService(new HttpService()); // Manually create an instance of SlackService
+  }
+
   private logger = new Logger();
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
@@ -26,6 +32,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this.logger.error(
       `${req.ip} ${req.originalUrl} ${req.method} ${exception}`,
     );
+    
     res.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
@@ -33,6 +40,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error,
     });
 
+    const slackResponse = {
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: req.url,
+      error: {
+        message: exception.message,
+        error: exception.name,
+      },
+    };
+
+    const responseJson = JSON.stringify(slackResponse, null, 2);
+    if (!(status >= 400 && status < 500)) {
+    await this.slackService.postMessageToSlack(responseJson);
+   }
   }
 
   catchUnknow(exception: unknown, host: ArgumentsHost) {
@@ -51,8 +72,29 @@ export class HttpExceptionFilter implements ExceptionFilter {
     res.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
-      path: req.url
+      path: req.url,
     });
-
   }
+}
+
+function exception(
+  exception: any,
+  unknown: any,
+  host: any,
+  ArgumentsHost: any,
+) {
+  throw new Error('Function not implemented.');
+}
+function catchUnknow(
+  exception: (
+    exception: any,
+    unknown: any,
+    host: any,
+    ArgumentsHost: any,
+  ) => void,
+  unknown: any,
+  host: any,
+  ArgumentsHost: any,
+) {
+  throw new Error('Function not implemented.');
 }

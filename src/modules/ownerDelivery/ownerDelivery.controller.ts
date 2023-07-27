@@ -1,11 +1,14 @@
 import { Controller, Put, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { LoggerService } from 'src/utils/logger.service';
 import { SuccessResponse } from '../successResponse';
 import { OwnerDeliveryService } from './ownerDelivery.service';
 
 @Controller('ownerDelivery')
 export class OwnerDeliveryController {
-  constructor(private readonly ownerDeliveryController: OwnerDeliveryService) {}
+  constructor(
+    private readonly ownerDeliveryController: OwnerDeliveryService,
+    private readonly loggerService: LoggerService) { }
 
   @Put('/ownerDelivery/status')
   @ApiOperation({
@@ -16,6 +19,7 @@ export class OwnerDeliveryController {
   async changeOwnerDeliveryStatus(
     @Param('statusId') statusId: string,
   ): Promise<SuccessResponse> {
+    this.loggerService.log('changeOwnerDeliveryStatus');
     return new SuccessResponse(100, '주문 상태가 수정되었습니다.');
   }
 }
