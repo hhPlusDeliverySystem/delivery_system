@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { APP_FILTER } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
+
+import { HttpExceptionFilter } from "src/middleware/exception.filter";
 import { LoggerService } from "src/utils/logger.service";
 import { Logger } from "winston";
 import { Store } from "../store/store.entity";

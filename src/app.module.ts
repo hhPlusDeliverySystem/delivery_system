@@ -22,16 +22,15 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import * as winston from 'winston';
 import { MyCartModule } from './modules/myCart/myCart.module';
 import { EntitySchemaEmbeddedColumnOptions } from 'typeorm';
-
 import { env } from 'process';
 import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './middleware/exception.filter';
 import { Bookmark } from './modules/bookmark/bookmark.entity';
 import { BookmarkModule } from './modules/bookmark/bookmark.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config';
 import { SlackService } from './utils/slack.service';
 import { HttpModule } from '@nestjs/axios';
-import { HttpExceptionFilter } from './middleware/exception.filter';
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
@@ -39,7 +38,6 @@ const config: SqliteConnectionOptions = {
   entities: [Review, Delivery, Store, Menu],
   synchronize: true,
 }
-
 
 @Module({
   imports: [
@@ -56,6 +54,7 @@ const config: SqliteConnectionOptions = {
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true
     }),
+  }),
     ReviewModule,
     DeliveryModule,
     StoreModule,
@@ -76,14 +75,8 @@ const config: SqliteConnectionOptions = {
   ],
 })
 
-
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
-
-console.log(process.env.RDS_HOST)
-console.log(process.env.RDS_USERNAME)
-console.log(process.env.RDS_PW)
-

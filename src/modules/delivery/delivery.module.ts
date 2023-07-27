@@ -18,7 +18,7 @@ import { DeliveryService } from './delivery.service';
     DeliveryRepository,
     ReviewRepository,
     Logger,
-    LoggerService
+    LoggerService,
   ],
   exports: [DeliveryRepository],
 })

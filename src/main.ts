@@ -11,7 +11,7 @@ import { createLogger } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { winstonLogger } from './utils/winston.util';
 import * as dotenv from 'dotenv';
-// import { HttpExceptionFilter } from './middleware/exception.filter';
+import { HttpExceptionFilter } from './middleware/exception.filter';
 
 async function bootstrap() {
   dotenv.config();
@@ -28,7 +28,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  // app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(3000);
 }
 bootstrap();

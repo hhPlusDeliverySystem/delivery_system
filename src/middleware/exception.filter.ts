@@ -32,15 +32,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this.logger.error(
       `${req.ip} ${req.originalUrl} ${req.method} ${exception}`,
     );
-
+    
     res.status(status).json({
+      statusCode: status,
       timestamp: new Date().toISOString(),
       path: req.url,
       error,
     });
 
     const slackResponse = {
-      statusCode: 500,
+      statusCode: status,
       timestamp: new Date().toISOString(),
       path: req.url,
       error: {
@@ -50,9 +51,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     const responseJson = JSON.stringify(slackResponse, null, 2);
-    // if (!(status >= 400 && status < 500)) {
+    if (!(status >= 400 && status < 500)) {
     await this.slackService.postMessageToSlack(responseJson);
-    // }
+   }
   }
 
   catchUnknow(exception: unknown, host: ArgumentsHost) {

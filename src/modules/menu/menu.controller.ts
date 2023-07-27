@@ -1,12 +1,11 @@
 import { Body, Controller, Post, UseFilters } from "@nestjs/common";
 import { ApiOperation } from "@nestjs/swagger";
-// import { HttpExceptionFilter } from "src/middleware/exception.filter";
+import { HttpExceptionFilter } from "src/middleware/exception.filter";
 import { LoggerService } from "src/utils/logger.service";
 import { SuccessResponse } from "../successResponse";
 import { MenuRequest } from "./dto/menuRequest";
 import { MenuService } from "./menu.service";
 import { Logger } from 'winston';
-import { HttpExceptionFilter } from "src/middleware/exception.filter";
 
 
 @Controller('menu')
