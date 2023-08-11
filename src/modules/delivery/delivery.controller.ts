@@ -1,13 +1,21 @@
-import { Controller, Param, Post, Put } from '@nestjs/common';
+import { Controller, Inject, Param, Post, Put } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { SuccessResponse } from '../successResponse';
 import { DeliveryService } from './delivery.service';
 
-
+import { level, Logger } from 'winston';
+import { AppController } from 'src/app.controller';
+import { LoggerService } from 'src/utils/logger.service';
 
 @Controller('delivery')
 export class DeliveryController {
-  constructor(private deliveryService: DeliveryService) {}
+
+  constructor(
+    private deliveryService: DeliveryService,
+    private readonly logger: Logger,
+    private readonly loggerService: LoggerService,
+  ) { }
+
 
   @Put('/:deliveryId/start')
   @ApiOperation({
@@ -18,7 +26,8 @@ export class DeliveryController {
   async createDelivery(
     @Param('deliveryId') deliveryId: number,
   ): Promise<SuccessResponse> {
-    // await this.deliveryService.updateDeliveryStart(deliveryId, new Date());
+    this.loggerService.log('delivery start');
+    await this.deliveryService.updateDeliveryStart(deliveryId, new Date());
     return new SuccessResponse(1000, '배달이 시작되었습니다.');
   }
 
@@ -31,7 +40,8 @@ export class DeliveryController {
   async endDelivery(
     @Param('deliveryId') deliveryId: number,
   ): Promise<SuccessResponse> {
-    // await this.deliveryService.updateDeliveryEnd(deliveryId, new Date());
+    this.loggerService.log('delivery end');
+    await this.deliveryService.updateDeliveryEnd(deliveryId, new Date());
     return new SuccessResponse(1000, '배달이 종료되었습니다.');
   }
 }

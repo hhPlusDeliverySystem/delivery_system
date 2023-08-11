@@ -4,20 +4,22 @@ import { StoreRepository } from "../store/store.repository";
 import { MenuRequest } from "./dto/menuRequest";
 import { MenuRepository } from "./menu.repository";
 import { Menu } from "./menu.entity";
+import { LoggerService } from "src/utils/logger.service";
 
 @Injectable()
 export class MenuService {
   constructor(
     private menuRepository: MenuRepository,
     private storeRepository: StoreRepository,
-  ) {}
+    private loggerService: LoggerService
+  ) { }
 
   async validateMenuRequest(menuRequest: MenuRequest): Promise<boolean> {
     const store = await this.storeRepository.findStoreById(menuRequest.storeId);
     if (store == null) {
       throw new BadRequestException('등록되지 않은 가게 입니다.');
     }
-   
+
     if (store != null && store.userId != menuRequest.userId) {
       throw new BadRequestException('자신의 매장이 아닙니다.');
     }
@@ -48,14 +50,20 @@ export class MenuService {
   }
 
   async saveMenu(menuRequest: MenuRequest): Promise<Menu> {
-    if(this.validateMenuRequest(menuRequest)) {
-      const newMenu = new Menu();
-      newMenu.storeId = menuRequest.storeId;
-      newMenu.name = menuRequest.name;
-      newMenu.price = menuRequest.price;
-      const result = await this.menuRepository.save(newMenu);
-      return result;
+    try {
+      await this.validateMenuRequest(menuRequest)
     }
+    catch (error) {
+      throw new BadRequestException(error.message)
+    }
+
+    const newMenu = new Menu();
+    newMenu.storeId = menuRequest.storeId;
+    newMenu.name = menuRequest.name;
+    newMenu.price = menuRequest.price;
+    const result = await this.menuRepository.save(newMenu);
+    return result;
+
   }
 
 }

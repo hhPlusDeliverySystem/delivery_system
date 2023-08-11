@@ -14,4 +14,10 @@ export class Review {
   @Column("int", { name: "userId" })
   userId: number;
 
+  constructor(content: string, deliveryId: number, userId: number) {
+    this.content = content;
+    this.deliveryId = deliveryId;
+    this.userId = userId;
+  }
+
 }

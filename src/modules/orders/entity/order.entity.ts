@@ -1,15 +1,14 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
-export @Entity({ name: 'order' })
-class order {
+@Entity({ name: 'order' })
+export class order {
 
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({ name: 'order_id' })
-    public orderId: string;
-
+    @Column({name: 'user_name'})
+    public userName: string;
 
     @Column({ name: 'order_status' })
     public orderStatus: string;
@@ -23,4 +22,5 @@ class order {
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
     public createdAt: Date;
 
+    
 }

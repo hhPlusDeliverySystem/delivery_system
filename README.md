@@ -19,6 +19,14 @@ $ docker build . -t delivery_system
 # run
 $ docker container run -d -p 3000:3000 delivery_sytem
 
+# local mysql setting
+
+## 1. use docker-compose
+$ docker-compose up -d
+
+## 2. use docker
+$ docker run --name delivery_system -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=delivery_system -d -p 3306:3306 mysql
+
 ```
 ## Swagger
 ![화면 캡처 2023-06-30 012752](https://github.com/taekyunJason/delivery_system/assets/44867889/8969e244-f75e-4e92-b32d-b128a92932fb)
